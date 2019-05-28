@@ -169,4 +169,4 @@ function displayUserInfo() {
 
 
 getUrlVars();
-displayUsersInfo();
+displayUserInfo();
