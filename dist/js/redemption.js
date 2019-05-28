@@ -1,4 +1,8 @@
 
+// TODO: I don't like that I am getting the num_asserts from two different databases.
+// FIXME: ^^^^^
+
+
 const BADGR_ISSUER_ID = "rGy5MNWtQgSs1vfnLyPlmg";
 const BADGR_ACCESS_TOKEN = "irLWj7bSsXb2Ln4vsTooyFSfSmwOSG";
 const BADGR_COURSE_TYPE = "course";
@@ -65,6 +69,7 @@ function setVarsGlobally(vars) {
   window.useremail = vars.useremail;
   window.epiphany_badgeclass_id = vars.epiphany_badgeclass_id;
   window.epiphany_issuer_id = vars.epiphany_issuer_id;
+  window.num_epiph_asserts = vars.num_epiph_asserts
 }
 
 function findGetParameter(parameterName) {
@@ -89,7 +94,7 @@ function getUrlVars() {
   var pc_pkg = JSON.parse(findGetParameter("pc_pkg_str"));
 
   var vars = {
-    num_epiph_asserts: 5,
+    num_epiph_asserts: pc_pkg.num_epiph_asserts,
     epiphany_badgeclass_id: pc_pkg.epiphany_badgeclass_id,
     epiphany_issuer_id: "rGy5MNWtQgSs1vfnLyPlmg",
     username: pc_pkg.username,
@@ -156,7 +161,8 @@ function getAssertions() {
 
 
 function displayUserInfo() {
-  document.getElementById("demo").innerHTML = window.username + ";" + window.useremail + ";" + window.epiphany_issuer_id + ";" + window.epiphany_badgeclass_id;
+  // document.getElementById("demo").innerHTML = window.username + ";" + window.useremail + ";" + window.epiphany_issuer_id + ";" + window.epiphany_badgeclass_id;
+  document.getElementById("introductory-text").innerHTML = "Congratulations " + window.username + " You currently have " + window.num_epiph_asserts + " Epiphany Points to spend."
 }
 
 
