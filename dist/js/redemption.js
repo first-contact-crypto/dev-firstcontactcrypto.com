@@ -1,3 +1,4 @@
+import { inherits } from "util";
 
 // TODO: I don't like that I am getting the num_asserts from two different databases.
 // FIXME: ^^^^^
@@ -73,11 +74,11 @@ function print(fmt, ...args) {
 }
 
 function getJSONData(url, successfunc, errorfunc) {
-  alert(url);
+  // alert(url);
   $.ajax(url, 
   {
     dataType: 'json', // type of response data
-    timeout: 500,     // timeout milliseconds
+    timeout: 3000,     // timeout milliseconds
     // success: function (data,status,xhr) {   // success callback function
     //     $('p').append(data.firstName + ' ' + data.middleName + ' ' + data.lastName);
     // },
@@ -89,6 +90,13 @@ function getJSONData(url, successfunc, errorfunc) {
     beforeSend: function(xhr) {
                   xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN)
                 }
+  });
+}
+
+function setDevButton(btnTxt, htmlString) {
+  $("#my-container").append("<button id=\"dev-button\">" + btnTxt + "</button>");
+  $("#dev-button").click(function() {
+    $("#my-container").append(htmlString);
   });
 }
 
@@ -122,7 +130,6 @@ function getUrlVars() {
         //   useremail: ""
         // };
   var pc_pkg = JSON.parse(getURLParameter("pc_pkg_str"));
-
   var useremail = ""
   if (DEV_ENV) {
     username = "peteralexander"
@@ -132,7 +139,6 @@ function getUrlVars() {
     useremail = pc_pkg.useremail
     username = pc_pkg.username
   }
-
   var vars = {
     num_epiph_asserts: Object.keys(assertions).length,
     epiphany_badgeclass_id: BADGR_SERVER_SLUG_EPIPHANY,
@@ -140,10 +146,8 @@ function getUrlVars() {
     username: username,
     useremail: useremail
   };
-
-  setVarsGlobally(vars);
-
-};
+  setVarsGlobally(vars)
+}
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
@@ -167,17 +171,18 @@ function getBadgeClasses() {
   // xhttp.open("GET", BADGR_BASE_URL + format(BADGR_BADGECLASS_SINGLE_ISSUER_PATH, "rGy5MNWtQgSs1vfnLyPlmg")+"?t="+Math.random(), true);
   // xhttp.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN)
   // xhttp.send()
-  getJSONData(format(BADGR_BADGECLASS_SINGLE_ISSUER_PATH, BADGR_ISSUER_ID), function(data, status, jqXhr) {
-    alert(format("SUCCESS.. got the badgeclasses {0}", data));
+  getJSONData(format(BADGR_BASE_URL + BADGR_BADGECLASS_SINGLE_ISSUER_PATH, BADGR_ISSUER_ID), function(data, status, jqXhr) {
+    // alert(format("SUCCESS.. got the badgeclasses {0}", JSON.stringify(data)));
     badgeclasses = data;
+    setDevButton("BadgeClasses", "<p>" + JSON.stringify(badgeclasses))
+
   },
   function(jqXhr, textStatus, errorMessage) {
-    alert("ERROR: In getBadgeClasses.. FAILED get badgeclasses request:: errorMessage: " +
-                errorMessage + "textStatus: " + textStatus)
+    // alert("ERROR: In getBadgeClasses.. FAILED get badgeclasses request:: errorMessage: " + errorMessage + "textStatus: " + textStatus)
+    setDevButton("BadgeClasses", "<p>" + JSON.stringify("ERROR: In getBadgeClasses.. FAILED get badgeclasses request:: errorMessage: " 
+                      + errorMessage + "textStatus: " + textStatus));
   });
-
 }
-
 
 function getAssertions() {
   console.log("In getAssertions")
@@ -308,6 +313,8 @@ function getBadgesToBeCreated() {
   }
   return ret
 }
+
+
 
 getUrlVars()
 displayUserInfo()
