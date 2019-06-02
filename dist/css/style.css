@@ -9,9 +9,18 @@ header,
   height: 100%;
 }
 
-#intro {
-  background: url("../img/loopable-stars-4096x2304.png") no-repeat center center
-    fixed;
+body {
+  /* background:
+    #000 
+    url("../img/loopable-stars-4096x2304.png") 
+    no-repeat 
+    center 
+    center
+    fixed; */
+    background-image: url("../img/loopable-stars-4096x2304.png");
+    background-color: #000;
+    background-repeat: repeat;
+    background-attachment: fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
