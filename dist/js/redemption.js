@@ -211,6 +211,7 @@ function getAssertions() {
     "INFO: In getAssertions.. the num assertions after: {0}",
     assertions.result.length
   );
+  window.num_epiph_asserts = window.assertions.result.length
 }
 
 function createBadge(name) {
@@ -512,7 +513,7 @@ async function testAssertionsCreated() {
     PRINT(
       "SUCCESS: In testAssertionsCreated.. assertions list created.. \\0/ {0}",
       window.assertions.result.length
-    );
+    )
   }
 }
 
