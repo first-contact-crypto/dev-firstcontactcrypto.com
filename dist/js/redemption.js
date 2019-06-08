@@ -73,7 +73,7 @@ function format(fmt, ...args) {
   );
 }
 
-function print(fmt, ...args) {
+function PRINT(fmt, ...args) {
   // Use this for debug statements;
   console.log(format(fmt, ...args));
 }
@@ -148,7 +148,7 @@ function isEmpty(obj) {
 }
 
 function getBadgeClasses() {
-  print("INFO: In getBadgeClasses");
+  PRINT("INFO: In getBadgeClasses");
   getJSONData(
     false,
     format(
@@ -158,19 +158,19 @@ function getBadgeClasses() {
     function(data, status, jqXhr) {
       // alert(format("SUCCESS.. got the badgeclasses {0}", JSON.stringify(data)));
       window.badgeclasses = data;
-      print(
+      PRINT(
         "SUCCESS: In getBadgeClasses.. badgclasses are {0}",
         JSON.stringify(window.badgeclasses)
       );
     },
     function(jqXhr, textStatus, errorMessage) {
-      print("ERROR: In getBadgeClasses.. {0}, {1}", textStatus, errorMessage);
+      PRINT("ERROR: In getBadgeClasses.. {0}, {1}", textStatus, errorMessage);
     }
   );
 }
 
 function getAssertions() {
-  print("INFO: In getAssertions");
+  PRINT("INFO: In getAssertions");
   getJSONData(
     false,
     format(
@@ -182,31 +182,32 @@ function getAssertions() {
       window.assertions = data;
       // setDevButton("Assertions", "<p>" + JSON.stringify(assertions))
       window.num_epiph_asserts = assertions.result.length;
-      print(
+      PRINT(
         "INFO: In getAssertions.. window.num_epiph_asserts: {0}",
         window.num_epiph_asserts
       );
     },
     function(jqXhr, textStatus, errorMessage) {
-      print("ERROR: In getAssertions.. {0}, {1}", textStatus, errorMessage);
+      PRINT("ERROR: In getAssertions.. {0}, {1}", textStatus, errorMessage);
     }
   );
-  print(
+  PRINT(
     "INFO: In getAssertions.. the num assertions before: {0}",
     assertions.result.length
   );
   for (i = 0; i < window.assertions.result.length; ++i) {
     a = window.assertions.result[i];
-    print(
+    PRINT(
       "INFO: In getAssertions.. assertion.recipient.identity: {0} window.useremail: {1}",
       a.recipient.identity,
       window.useremail
     );
     if (a.recipient.identity != window.useremail) {
       window.assertions.result.splice(i, 1);
+      --window.num_epiph_asserts
     }
   }
-  print(
+  PRINT(
     "INFO: In getAssertions.. the num assertions after: {0}",
     assertions.result.length
   );
@@ -217,7 +218,7 @@ function createBadge(name) {
     "https://api.badgr.io/v2/issuers/{0}/badgeclasses",
     BADGR_ISSUER_ID
   );
-  print("INFO: In createBadge.. badge_url is: {0}", badge_url);
+  PRINT("INFO: In createBadge.. badge_url is: {0}", badge_url);
   $.ajax({
     method: "POST",
     dataType: "json",
@@ -226,13 +227,13 @@ function createBadge(name) {
     url: badge_url,
     data: JSON.stringify({ name: name, description: "An FCC prize category." }),
     success: function(data, status, xhr) {
-      print(
+      PRINT(
         "SUCCESS: In createBadge.. badge created: {0}",
         JSON.stringify(data)
       );
     },
     error: function(xhr, status, errMsg) {
-      print(
+      PRINT(
         "ERROR: In createBadge.. badge creation failed! {0} {1}",
         status,
         errMsg
@@ -245,7 +246,7 @@ function createBadge(name) {
 }
 
 function createBadges(name_list) {
-  print(
+  PRINT(
     "In createBadges.. the number of badges to create is: {0} .. {1}",
     name_list.length,
     name_list.toString()
@@ -278,7 +279,7 @@ function deleteAssertion() {
     return 
   }
   var assertion_slug = assertions.result[0].entityId;
-  print("In deleteAssertion.. the assertion_slug is: {0}", assertion_slug);
+  PRINT("In deleteAssertion.. the assertion_slug is: {0}", assertion_slug);
   var assertion_url = format(
     BADGR_BASE_URL + BADGR_ASSERTION_DELETE_PATH,
     assertion_slug
@@ -294,14 +295,14 @@ function deleteAssertion() {
     // data: JSON.stringify({"name": name, "description": "An FCC prize category."}),
     // data: JSON.stringify({"recipient": {"identity": useremail, "type": "email", "hashed": false, "plaintextIdentity": username}}),
     success: function(data, status, xhr) {
-      print(
+      PRINT(
         "SUCCESS: In deleteAssertion.. assertion deleted: {0}",
         JSON.stringify(data)
       );
     },
     error: function(xhr, status, errMsg) {
       if (xhr.status != 200) {
-        print(
+        PRINT(
           "ERROR: In deleteAssertion.. assertion deletion failed! {0} {1} {2}",
           xhr.status,
           status,
@@ -317,7 +318,7 @@ function deleteAssertion() {
 }
 
 function deleteAssertions(num) {
-  print("INFO: In deleteAssertions.. deleting {0}", num);
+  PRINT("INFO: In deleteAssertions.. deleting {0}", num);
   for (i = 0; i < num; i++) {
     deleteAssertion();
     num_epiph_asserts -= 1;
@@ -325,7 +326,7 @@ function deleteAssertions(num) {
 }
 
 function createAssertion() {
-  print(
+  PRINT(
     "INFO: In createAssertion.. the selected prize is: {0}",
     window.selectedPrize
   );
@@ -334,7 +335,7 @@ function createAssertion() {
     BADGR_BASE_URL + BADGR_ASSERTION_BADGECLASS_PATH,
     badgeId
   );
-  print("INFO: In createAssertion.. the assertion url is: {0}", assertion_url);
+  PRINT("INFO: In createAssertion.. the assertion url is: {0}", assertion_url);
   $.ajax({
     method: "POST",
     dataType: "json",
@@ -351,13 +352,13 @@ function createAssertion() {
       }
     }),
     success: function(data, status, xhr) {
-      print(
+      PRINT(
         "SUCCESS: In createAssertion.. assertion created: {0}",
         JSON.stringify(data)
       );
     },
     error: function(xhr, status, errMsg) {
-      print(
+      PRINT(
         "ERROR: In createAssertion.. assertion creation failed! {0} {1}",
         status,
         errMsg
@@ -371,7 +372,7 @@ function createAssertion() {
 }
 
 function createPrizeAssertions(ep_spent) {
-  print("INFO: In createPrizeAssertion");
+  PRINT("INFO: In createPrizeAssertion");
   for (var i = 0; i < ep_spent; i++) {
     createAssertion();
   }
@@ -388,10 +389,10 @@ function onPlaceBidEvent() {
   if (ep_spent == 0) {
     return true;
   }
-  print("INFO: In onPlaceBidEvent");
+  PRINT("INFO: In onPlaceBidEvent");
 
   ep_left = ep_saved - ep_spent;
-  print(
+  PRINT(
     "INFO: ep_left: {0} ep_saved: {1} ep_spent: {2}",
     ep_left,
     ep_saved,
@@ -429,30 +430,30 @@ function convertToSlug(text) {
 }
 
 function getPrizeList() {
-  print("INFO: In getPrizeList");
+  PRINT("INFO: In getPrizeList");
   $(".prize").each(function(index) {
     var txt = convertToSlug($(this).text());
-    print("INFO: In getPrizeList.. the prize is: {0}", txt);
+    PRINT("INFO: In getPrizeList.. the prize is: {0}", txt);
     window.prizeList.push(txt);
   });
 }
 
 function getBadgeClassNamesList() {
-  print(
+  PRINT(
     "INFO: In getBadgeClassNameList.. {0}",
     window.badgeclasses.result.length
   );
   for (var i = 0; i < window.badgeclasses.result.length; i++) {
     var name = window.badgeclasses.result[i].name;
-    // print("{0}", name)
+    // PRINT("{0}", name)
     badgeclassNamesList.push(name);
   }
-  print("INFO: bcnl: {0}", badgeclassNamesList.length);
+  PRINT("INFO: bcnl: {0}", badgeclassNamesList.length);
   return badgeclassNamesList;
 }
 
 function getBadgesToBeCreated() {
-  print("INFO: In getBadgesToBeCreated");
+  PRINT("INFO: In getBadgesToBeCreated");
   if (window.badgeclasses == null) {
     testBadgesCreated();
   }
@@ -461,7 +462,7 @@ function getBadgesToBeCreated() {
   plSet = new Set(window.prizeList);
   bcSet = new Set(window.badgeclassNamesList);
   outSet = new Set([...plSet].filter(x => !bcSet.has(x)));
-  print(
+  PRINT(
     "INFO: In getBadgesToBeCreated.. plSet size: {0} .. bcSet size: {1} .. out size: {2}",
     plSet.size,
     bcSet.size,
@@ -471,16 +472,17 @@ function getBadgesToBeCreated() {
 }
 
 async function testBadgesCreated() {
-  print("INFO: In testBadgesCreated");
+  PRINT("INFO: In testBadgesCreated");
+  started = false 
   if (started === true) {
     window.timer_now_time += 3000;
   }
   started = true;
-  print("INFO: In testBadgesCreated");
+  PRINT("INFO: In testBadgesCreated");
   if (badgeclasses == null) {
     await sleep(500);
     if (window.timer_now_time > 6000) {
-      print(
+      PRINT(
         "In testBadgesCreated.. WTF 6000 ms have passed, calling getBadgeClasses"
       );
       getBadgeClasses();
@@ -489,7 +491,7 @@ async function testBadgesCreated() {
     }
     testBadgesCreated();
   } else {
-    print(
+    PRINT(
       "SUCCESS: In testBadgesCreated.. badgeclasses list created.. \\o/ {0}",
       window.badgeclasses.result.length
     );
@@ -497,7 +499,8 @@ async function testBadgesCreated() {
 }
 
 async function testAssertionsCreated() {
-  print("INFO: In testAssertionsCreated");
+  PRINT("INFO: In testAssertionsCreated");
+  started = false
   if (started === true) {
     window.timer_now_time += 3000;
   }
@@ -506,7 +509,7 @@ async function testAssertionsCreated() {
     await sleep(500);
     testAssertionsCreated();
   } else {
-    print(
+    PRINT(
       "SUCCESS: In testAssertionsCreated.. assertions list created.. \\0/ {0}",
       window.assertions.result.length
     );
@@ -515,14 +518,14 @@ async function testAssertionsCreated() {
 
 function getBadgeId(name) {
   var num = badgeclasses.result.length;
-  print(
+  PRINT(
     "In getBadgeId.. the num badgeclasses is: {0} .. the name is: {1}",
     num,
     name
   );
   for (var i = 0; i < num; i++) {
     var bc = window.badgeclasses.result[i];
-    // print("In getBadgeId.. the bc.name is: {0} .. the name is: {1}", bc.name, name)
+    // PRINT("In getBadgeId.. the bc.name is: {0} .. the name is: {1}", bc.name, name)
     if (bc.name === name) {
       return bc.entityId;
     }
@@ -531,16 +534,15 @@ function getBadgeId(name) {
 
 getUrlVars();
 getBadgeClasses();
-
 testBadgesCreated();
 getAssertions();
 testAssertionsCreated();
 displaySpendEPText();
 getPrizeList();
-print("INFO: In global_scope.. prizeList: {0}", prizeList.toString());
+PRINT("INFO: In global_scope.. prizeList: {0}", prizeList.toString());
 var new_badges_needed = getBadgesToBeCreated();
 var num_badges_needed = new_badges_needed.length;
-print("INFO: In global_scope.. num_badges_needed: {0}", num_badges_needed);
+PRINT("INFO: In global_scope.. num_badges_needed: {0}", num_badges_needed);
 if (num_badges_needed > 0) {
   createBadges(new_badges_needed);
 }
