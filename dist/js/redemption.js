@@ -518,6 +518,9 @@ async function testAssertionsCreated() {
 }
 
 function getBadgeId(name) {
+  if (window.badgeclasses == null) {
+    testBadgesCreated();
+  }
   var num = badgeclasses.result.length;
   PRINT(
     "DASHBOARD: In getBadgeId.. the num badgeclasses is: {0} .. the name is: {1}",
