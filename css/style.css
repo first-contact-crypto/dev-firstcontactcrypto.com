@@ -45,6 +45,10 @@ body {
   color:  #fff !important;
 }
 
+.my-color-success {
+  color: #00c851;
+}
+
 .navbar {
   background-color: #111111 !important;
 }
