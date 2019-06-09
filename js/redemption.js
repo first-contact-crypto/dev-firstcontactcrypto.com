@@ -182,35 +182,26 @@ function getAssertions() {
       window.assertions = data;
       // setDevButton("Assertions", "<p>" + JSON.stringify(assertions))
       window.num_epiph_asserts = assertions.result.length;
-      PRINT(
-        "INFO: In getAssertions.. window.num_epiph_asserts: {0}",
-        window.num_epiph_asserts
-      );
+      PRINT("INFO: In getAssertions.. window.num_epiph_asserts: {0}", window.num_epiph_asserts);
     },
     function(jqXhr, textStatus, errorMessage) {
       PRINT("ERROR: In getAssertions.. {0}, {1}", textStatus, errorMessage);
     }
   );
+  var num_assertions_before = assertions.result.length
+  var assertions_list = assertions.result
+
   PRINT(
-    "INFO: In getAssertions.. the num assertions before: {0}",
-    assertions.result.length
-  );
-  for (i = 0; i < window.assertions.result.length; ++i) {
-    a = window.assertions.result[i];
-    PRINT(
-      "INFO: In getAssertions.. assertion.recipient.identity: {0} window.useremail: {1}",
-      a.recipient.identity,
-      window.useremail
-    );
-    if (a.recipient.identity != window.useremail) {
-      window.assertions.result.splice(i, 1);
-      --window.num_epiph_asserts
+    "INFO: In getAssertions.. the num assertions before: {0}", num_assertions_before);
+  var assertions_to_keep = []
+  for (i = 0; i < num_assertions_before;++i) {
+    a = assertions_list[i]
+    if (a.recipient.identity === useremail) {
+      assertions_to_keep.push(a)
     }
   }
-  PRINT(
-    "INFO: In getAssertions.. the num assertions after: {0}",
-    assertions.result.length
-  );
+  assertions.result = assertions_to_keep
+  PRINT("INFO: In getAssertions.. the num assertions after: {0}", assertions.result.length);
   window.num_epiph_asserts = window.assertions.result.length
 }
 
@@ -332,11 +323,12 @@ function createAssertion() {
     window.selectedPrize
   );
   var badgeId = getBadgeId(window.selectedPrize);
+  PRINT("In createAssertion.. the selected prize id: {0}", badgeId)
   var assertion_url = format(
     BADGR_BASE_URL + BADGR_ASSERTION_BADGECLASS_PATH,
     badgeId
   );
-  PRINT("INFO: In createAssertion.. the assertion url is: {0}", assertion_url);
+  PRINT("In createAssertion.. the assertion url is: {0}", assertion_url);
   $.ajax({
     method: "POST",
     dataType: "json",
@@ -401,20 +393,28 @@ function onPlaceBidEvent() {
   );
   createPrizeAssertions(ep_spent);
   deleteAssertions(ep_spent);
-  $("#welcome-video").remove();
+  // $("#welcome-video").remove();
   $("#welcome-title").text("Good job cryptonaut and good luck!");
   $("#introductory-text").text(
     "You now are entered to win, an email will be sent you confirming your bid."
   );
-  var msg =
-    "Now you can continue to bid on another prize with your remaining " +
-    ep_left +
-    " Epiphany Points, or go on back to the control center to earn some more!";
-  $("#congrats-instructions").text(msg);
-  $("#congrats-instructions").after(
-    '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-primary">Mission Control</a>'
-  );
-  ep_saved = window.num_epiph_asserts;
+
+  var msg = ""
+  if (ep_left != 0) {
+    msg = "Now you can continue to bid on another prize with your remaining " +
+      ep_left +
+      " Epiphany Points, or go on back to the control center to earn some more!";
+  }
+  else {
+    msg = "Now.. go back to Mission Control and earn more Epiphany Points!"
+  }
+    $("#congrats-instructions").text(msg);
+    $("#congrats-instructions").after(
+      '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-border-success btn-sm">Mission Control</a>'
+    );
+    ep_saved = window.num_epiph_asserts;
+  }
+
 
   ep_left = ep_saved - ep_spent;
   createPrizeAssertions(ep_spent);
