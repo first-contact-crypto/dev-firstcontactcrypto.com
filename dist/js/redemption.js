@@ -1,41 +1,35 @@
 const DEV_ENV = false;
 
-// {
-//   "badgr_access_token": "eQYBJeoj8MD5CNNGiW9lbhmrqoGYTz",
-//   "badgr_refresh_token": "ScStrEeMla8gfXfR70Xxmm0sEW1zRY"
-// }
+const BADGR_ACCESS_TOKEN = "iZZHCNoDE7RBjuI0f8DpWtNGkLmx7l"
+const BADGR_ISSUER_ID = "rGy5MNWtQgSs1vfnLyPlmg"
+const BADGR_COURSE_TYPE = "course"
+const BADGR_EPIPHANY_TYPE = "epiphany"
+const BADGR_REDEMPTION_TYPE = "redemption"
+const BADGR_BASE_URL = "https://api.badgr.io/"
+const BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ"
+const BADGR_SERVER_SLUG_REDEMPTION = "XrG4QUcyTQGVch1VipS-Qw"
 
-const BADGR_ISSUER_ID = "rGy5MNWtQgSs1vfnLyPlmg";
-const BADGR_ACCESS_TOKEN = "Jk4K0I5RtotHTqwy7fRb1vAipfFECU";
-const BADGR_COURSE_TYPE = "course";
-const BADGR_EPIPHANY_TYPE = "epiphany";
-const BADGR_REDEMPTION_TYPE = "redemption";
-const BADGR_BASE_URL = "https://api.badgr.io/";
-const BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ";
-const BADGR_SERVER_SLUG_REDEMPTION = "XrG4QUcyTQGVch1VipS-Qw";
-
-var BADGR_BADGECLASS_SINGLE_ISSUER_PATH = "v2/issuers/{0}/badgeclasses"; // issuer id
-var BADGR_ASSERTION_BADGECLASS_PATH = "v2/badgeclasses/{0}/assertions"; // badge_class entityId
-var BADGR_ASSERTION_ISSUER_PATH = "v2/issuers/{0}/assertions";
-var BADGR_ASSERTION_DELETE_PATH = "v2/assertions/{0}";
+var BADGR_BADGECLASS_SINGLE_ISSUER_PATH = "v2/issuers/{0}/badgeclasses" // issuer id
+var BADGR_ASSERTION_BADGECLASS_PATH = "v2/badgeclasses/{0}/assertions" // badge_class entityId
+var BADGR_ASSERTION_ISSUER_PATH = "v2/issuers/{0}/assertions"
+var BADGR_ASSERTION_DELETE_PATH = "v2/assertions/{0}"
 
 // https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions
 
-var recipient = new Object();
-recipient.identity = "string";
-recipient.type = "email";
-recipient.hashed = true;
-recipient.plaintextIdentity = "string";
-
-var badgeclasses = null;
-var assertions = null;
-var badgeclasses_txt = "";
-var assertions_txt = "";
-var prizeList = [];
-var badgeclassNamesList = [];
-var selectedPrize = "";
-var timer_started = false;
-var timer_now_time = 0;
+var recipient = new Object()
+recipient.identity = "string"
+recipient.type = "email"
+recipient.hashed = true
+recipient.plaintextIdentity = "string"
+var badgeclasses = null
+var assertions = null
+var badgeclasses_txt = ""
+var assertions_txt = ""
+var prizeList = []
+var badgeclassNamesList = []
+var selectedPrize = ""
+var timer_started = false
+var timer_now_time = 0
 
 // EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
 // IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_efc20af1 - 7d43 - 4d1e - 877e-447244ea3fd3.png
@@ -56,16 +50,16 @@ function format(fmt, ...args) {
   // retstr = format("blah: {0}", "the_var")
   // https://coderwall.com/p/flonoa/simple-string-format-in-javascript <BOTTOM OF THE PAGE>
   if (!fmt.match(/^(?:(?:(?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{[0-9]+\}))+$/)) {
-    throw new Error("invalid format string.");
+    throw new Error("invalid format string.")
   }
   return fmt.replace(
     /((?:[^{}]|(?:\{\{)|(?:\}\}))+)|(?:\{([0-9]+)\})/g,
     (m, str, index) => {
       if (str) {
-        return str.replace(/(?:{{)|(?:}})/g, m => m[0]);
+        return str.replace(/(?:{{)|(?:}})/g, m => m[0])
       } else {
         if (index >= args.length) {
-          throw new Error("argument index is out of range in format");
+          throw new Error("argument index is out of range in format")
         }
         return args[index];
       }
@@ -75,11 +69,11 @@ function format(fmt, ...args) {
 
 function PRINT(fmt, ...args) {
   // Use this for debug statements;
-  console.log(format(fmt, ...args));
+  console.log(format(fmt, ...args))
 }
 
 function getJSONData(sync, url, successfunc, errorfunc) {
-  console.log("INFO: In getJSONData");
+  console.log("INFO: In getJSONData")
   $.ajax({
     method: "GET",
     dataType: "json",
@@ -91,24 +85,25 @@ function getJSONData(sync, url, successfunc, errorfunc) {
     success: successfunc,
     error: errorfunc,
     beforeSend: function(xhr) {
-      xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN);
+      xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN)
+      // xhr.setRequestHeader("Content-Type", "application/json")
     }
   });
 }
 
 function setVarsGlobally(vars) {
-  window.username = vars.username;
-  window.useremail = vars.useremail;
-  window.epiphany_badgeclass_id = vars.epiphany_badgeclass_id;
-  window.epiphany_issuer_id = vars.epiphany_issuer_id;
+  window.username = vars.username
+  window.useremail = vars.useremail
+  window.epiphany_badgeclass_id = vars.epiphany_badgeclass_id
+  window.epiphany_issuer_id = vars.epiphany_issuer_id
 }
 
 function getURLParameter(parameterName) {
   var result = null,
     tmp = [];
-  var items = location.search.substr(1).split("&");
+  var items = location.search.substr(1).split("&")
   for (var index = 0; index < items.length; index++) {
-    tmp = items[index].split("=");
+    tmp = items[index].split("=")
     if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
   }
   return result;
@@ -181,35 +176,26 @@ function getAssertions() {
       window.assertions = data;
       // setDevButton("Assertions", "<p>" + JSON.stringify(assertions))
       window.num_epiph_asserts = assertions.result.length;
-      PRINT(
-        "INFO: In getAssertions.. window.num_epiph_asserts: {0}",
-        window.num_epiph_asserts
-      );
+      PRINT("INFO: In getAssertions.. window.num_epiph_asserts: {0}", window.num_epiph_asserts);
     },
     function(jqXhr, textStatus, errorMessage) {
       PRINT("ERROR: In getAssertions.. {0}, {1}", textStatus, errorMessage);
     }
   );
+  var num_assertions_before = assertions.result.length
+  var assertions_list = assertions.result
+
   PRINT(
-    "INFO: In getAssertions.. the num assertions before: {0}",
-    assertions.result.length
-  );
-  for (i = 0; i < window.assertions.result.length; ++i) {
-    a = window.assertions.result[i];
-    PRINT(
-      "INFO: In getAssertions.. assertion.recipient.identity: {0} window.useremail: {1}",
-      a.recipient.identity,
-      window.useremail
-    );
-    if (a.recipient.identity != window.useremail) {
-      window.assertions.result.splice(i, 1);
-      --window.num_epiph_asserts
+    "INFO: In getAssertions.. the num assertions before: {0}", num_assertions_before);
+  var assertions_to_keep = []
+  for (i = 0; i < num_assertions_before;++i) {
+    a = assertions_list[i]
+    if (a.recipient.identity === useremail) {
+      assertions_to_keep.push(a)
     }
   }
-  PRINT(
-    "INFO: In getAssertions.. the num assertions after: {0}",
-    assertions.result.length
-  );
+  assertions.result = assertions_to_keep
+  PRINT("INFO: In getAssertions.. the num assertions after: {0}", assertions.result.length);
   window.num_epiph_asserts = window.assertions.result.length
 }
 
@@ -241,7 +227,6 @@ function createBadge(name) {
     },
     beforeSend: function(xhr) {
       xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN);
-      xhr.setRequestHeader("Content-Type", "application/json");
     }
   });
 }
@@ -332,24 +317,25 @@ function createAssertion() {
     window.selectedPrize
   );
   var badgeId = getBadgeId(window.selectedPrize);
+  PRINT("In createAssertion.. the selected prize id: {0}", badgeId)
   var assertion_url = format(
     BADGR_BASE_URL + BADGR_ASSERTION_BADGECLASS_PATH,
     badgeId
   );
-  PRINT("INFO: In createAssertion.. the assertion url is: {0}", assertion_url);
-  PRINT("INFO: In createAssertion.. the window.useremail is {0} ,the window.username is {1}", window.useremail, window.useremail)
+  PRINT("In createAssertion.. the assertion url is: {0}", assertion_url);
   $.ajax({
     method: "POST",
     dataType: "json",
     processData: false,
     contentType: "application/json",
     url: assertion_url,
+    // data: JSON.stringify({"name": name, "description": "An FCC prize category."}),
     data: JSON.stringify({
       recipient: {
-        identity: window.useremail,
+        identity: useremail,
         type: "email",
         hashed: false,
-        plaintextIdentity: window.username
+        plaintextIdentity: username
       }
     }),
     success: function(data, status, xhr) {
@@ -401,20 +387,28 @@ function onPlaceBidEvent() {
   );
   createPrizeAssertions(ep_spent);
   deleteAssertions(ep_spent);
-  $("#welcome-video").remove();
+  // $("#welcome-video").remove();
   $("#welcome-title").text("Good job cryptonaut and good luck!");
   $("#introductory-text").text(
     "You now are entered to win, an email will be sent you confirming your bid."
   );
-  var msg =
-    "Now you can continue to bid on another prize with your remaining " +
-    ep_left +
-    " Epiphany Points, or go on back to the control center to earn some more!";
-  $("#congrats-instructions").text(msg);
-  $("#congrats-instructions").after(
-    '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-primary">Mission Control</a>'
-  );
-  ep_saved = window.num_epiph_asserts;
+
+  var msg = ""
+  if (ep_left != 0) {
+    msg = "Now you can continue to bid on another prize with your remaining " +
+      ep_left +
+      " Epiphany Points, or go on back to the control center to earn some more!";
+  }
+  else {
+    msg = "Now.. go back to Mission Control and earn more Epiphany Points!"
+  }
+    $("#congrats-instructions").text(msg);
+    $("#congrats-instructions").after(
+      '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-border-success btn-sm">Mission Control</a>'
+    );
+    ep_saved = window.num_epiph_asserts;
+  }
+
 
   ep_left = ep_saved - ep_spent;
   createPrizeAssertions(ep_spent);
@@ -518,9 +512,6 @@ async function testAssertionsCreated() {
 }
 
 function getBadgeId(name) {
-  if (window.badgeclasses == null) {
-    testBadgesCreated();
-  }
   var num = badgeclasses.result.length;
   PRINT(
     "DASHBOARD: In getBadgeId.. the num badgeclasses is: {0} .. the name is: {1}",
