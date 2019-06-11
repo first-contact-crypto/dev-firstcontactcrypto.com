@@ -562,6 +562,7 @@ function prizeAccounting() {
     PRINT("INFO In prizeAssertions: NEW prizeAssertion: {0}", JSON.stringify(prizeAssertion))
     if (bp.description) {
       // sets prizeAssertions if there are existing on the server
+      PRINT("INFO In prizeAccounting.. the description string is: {0}", bp.description)
       var ret = JSON.parse(bp.description)
       PRINT("INFO In prizeAssertions: typeof(JSON.parse(bp.description): {0}", typeof(ret))
       if (Array.isArray(ret)) {
