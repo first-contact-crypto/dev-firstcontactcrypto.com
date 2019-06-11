@@ -343,7 +343,8 @@ function createAssertion() {
           type: "email",
           hashed: false,
           plaintextIdentity: username
-      }
+      },
+      description: "An Assertion for an FCC Prize"
     }),
     success: function(data, status, xhr) {
       PRINT(
@@ -366,9 +367,14 @@ function createAssertion() {
 
 function createPrizeAssertions(ep_spent) {
   PRINT("INFO: In createPrizeAssertion");
+  ret = true
   for (var i = 0; i < ep_spent; i++) {
-    createAssertion();
+    tret = createAssertion();
+    if (tret === false) {
+      ret = false
+    }
   }
+  return ret 
 }
 
 function onSelectPrizeEvent(title) {
@@ -416,9 +422,12 @@ function onPlaceBidEvent() {
   }
 
   ep_left = ep_saved - ep_spent;
-  // createPrizeAssertions(ep_spent);     FIXME
-  if (prizeAccounting()) {
-      deleteAssertions(ep_spent);
+  var good = createPrizeAssertions(ep_spent)
+  if (good) {
+    deleteAssertions();
+  }
+  else {
+    PRINT("ERROR: NOT ALL PRIZE ASSERTIONS WERE CREATED!! NOT DELETING ANY OF THEM!")
   }
   return true;
 }
