@@ -1,30 +1,32 @@
-// var GitHub = require("github-api");
-
 const DEV_ENV = false;
 
-const BADGR_ACCESS_TOKEN = "iQVVlGccqshiTnTa4cNDdDFrplKM5t";
-const BADGR_ISSUER_ID = "MC67oN42TPm9VARGW7TmKw";
+// {
+//   "badgr_access_token": "eQYBJeoj8MD5CNNGiW9lbhmrqoGYTz",
+//   "badgr_refresh_token": "ScStrEeMla8gfXfR70Xxmm0sEW1zRY"
+// }
+
+const BADGR_ISSUER_ID = "rGy5MNWtQgSs1vfnLyPlmg";
+const BADGR_ACCESS_TOKEN = "wOFWgXg3Gv1t4TWsEy1FJjWkSZSn4A";
 const BADGR_COURSE_TYPE = "course";
 const BADGR_EPIPHANY_TYPE = "epiphany";
 const BADGR_REDEMPTION_TYPE = "redemption";
-// const BADGR_BASE_URL = "https://api.badgr.io/";
-const BADGR_BASE_URL = "https://badgr.firstcontactcrypto.com";
-const BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A";
+const BADGR_BASE_URL = "https://api.badgr.io/";
+const BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ";
 const BADGR_SERVER_SLUG_REDEMPTION = "XrG4QUcyTQGVch1VipS-Qw";
 
 var BADGR_BADGECLASS_SINGLE_ISSUER_PATH = "v2/issuers/{0}/badgeclasses"; // issuer id
 var BADGR_ASSERTION_BADGECLASS_PATH = "v2/badgeclasses/{0}/assertions"; // badge_class entityId
 var BADGR_ASSERTION_ISSUER_PATH = "v2/issuers/{0}/assertions";
 var BADGR_ASSERTION_DELETE_PATH = "v2/assertions/{0}";
-var BADGR_BADGECLASS_UPDATE_PATH = "v2/badgeclasses/{0}";
 
-// https://api.badgr.io/v2/badgeclasses/CM-sak0wQuCty2BfSEle3A/assertions
+// https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions
 
 var recipient = new Object();
 recipient.identity = "string";
 recipient.type = "email";
 recipient.hashed = true;
 recipient.plaintextIdentity = "string";
+
 var badgeclasses = null;
 var assertions = null;
 var badgeclasses_txt = "";
@@ -34,22 +36,11 @@ var badgeclassNamesList = [];
 var selectedPrize = "";
 var timer_started = false;
 var timer_now_time = 0;
-var ep_spent = 0;
-var ep_saved = 0;
-var ep_left = 0;
-var cnt = 0;
-var num_epiph_asserts = 0;
 
-// var gh = new GitHub({ token: "ff2254e5a7e7154411a13ea7dfb60fbb941158c0" });
-// // var gh = new GitHub({username: '', password: ''})
-// var gh_fcc = gh.getOrganization('first-contact-crypto')
-// var gist_id = "1b4318e76e5c02436425a1a8f754cec4"
-// var gist = gh.getGist(gist_id)
-
-// EPIPHANY BADGE SERVER SLUG: CM-sak0wQuCty2BfSEle3A
+// EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
 // IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_efc20af1 - 7d43 - 4d1e - 877e-447244ea3fd3.png
 
-// COURSE BADGE SERVER SLUG: RBNmTgTUTQC4o_0-yDIA4g
+// COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
 // IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_63237c1a - 3f3d - 40b7 - 9e48 - 085658d2799f.png
 
 // REDEMPTION BADGE SERVER SLUG: XrG4QUcyTQGVch1VipS-Qw
@@ -145,7 +136,7 @@ function getUrlVars() {
     // num_epiph_asserts: Object.keys(assertions).length,
     // num_epiph_asserts: pc_pkg.num_epiph_asserts,
     epiphany_badgeclass_id: BADGR_SERVER_SLUG_EPIPHANY,
-    epiphany_issuer_id: "MC67oN42TPm9VARGW7TmKw",
+    epiphany_issuer_id: "rGy5MNWtQgSs1vfnLyPlmg",
     username: username,
     useremail: useremail
   };
@@ -187,7 +178,9 @@ function getAssertions() {
       BADGR_SERVER_SLUG_EPIPHANY
     ),
     function(data, status, jqXhr) {
+      // alert(format("SUCCESS.. got the badgeclasses {0}", JSON.stringify(data)));
       window.assertions = data;
+      // setDevButton("Assertions", "<p>" + JSON.stringify(assertions))
       window.num_epiph_asserts = assertions.result.length;
       PRINT(
         "INFO: In getAssertions.. window.num_epiph_asserts: {0}",
@@ -198,36 +191,32 @@ function getAssertions() {
       PRINT("ERROR: In getAssertions.. {0}, {1}", textStatus, errorMessage);
     }
   );
-  var num_assertions_before = assertions.result.length;
-  var assertions_list = assertions.result;
-
   PRINT(
     "INFO: In getAssertions.. the num assertions before: {0}",
-    num_assertions_before
+    assertions.result.length
   );
-  var assertions_to_keep = [];
-  for (i = 0; i < num_assertions_before; ++i) {
-    a = assertions_list[i];
-    if (a.recipient.identity === useremail) {
-      assertions_to_keep.push(a);
+  for (i = 0; i < window.assertions.result.length; ++i) {
+    a = window.assertions.result[i];
+    PRINT(
+      "INFO: In getAssertions.. assertion.recipient.identity: {0} window.useremail: {1}",
+      a.recipient.identity,
+      window.useremail
+    );
+    if (a.recipient.identity != window.useremail) {
+      window.assertions.result.splice(i, 1);
+      --window.num_epiph_asserts
     }
   }
-  assertions.result = assertions_to_keep;
   PRINT(
     "INFO: In getAssertions.. the num assertions after: {0}",
     assertions.result.length
   );
-  window.num_epiph_asserts = window.assertions.result.length;
-  PRINT(
-    "INFO In getAssertions for the {0} time.. window.num_epiph_asserts: {1}",
-    ++cnt,
-    window.num_epiph_asserts
-  );
+  window.num_epiph_asserts = window.assertions.result.length
 }
 
 function createBadge(name) {
   var badge_url = format(
-    "https://badgr.firstcontactcrypto.com/v2/issuers/{0}/badgeclasses",
+    "https://api.badgr.io/v2/issuers/{0}/badgeclasses",
     BADGR_ISSUER_ID
   );
   PRINT("INFO: In createBadge.. badge_url is: {0}", badge_url);
@@ -243,8 +232,6 @@ function createBadge(name) {
         "SUCCESS: In createBadge.. badge created: {0}",
         JSON.stringify(data)
       );
-      getBadgeClasses();
-      testBadgesCreated();
     },
     error: function(xhr, status, errMsg) {
       PRINT(
@@ -257,7 +244,6 @@ function createBadge(name) {
       xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN);
     }
   });
-  return data.result.length;
 }
 
 function createBadges(name_list) {
@@ -269,7 +255,7 @@ function createBadges(name_list) {
   for (var i = 0; i < name_list.length; i++) {
     createBadge(name_list[i]);
   }
-  getBadgeClasses();
+  // createBadge(name_list[0])
 }
 
 // function displayUserInfo() {
@@ -291,7 +277,7 @@ function displaySpendEPText() {
 function deleteAssertion() {
   ("In deleteAssertion");
   if (assertions.result.length == 0) {
-    return;
+    return 
   }
   var assertion_slug = assertions.result[0].entityId;
   PRINT("In deleteAssertion.. the assertion_slug is: {0}", assertion_slug);
@@ -307,6 +293,8 @@ function deleteAssertion() {
     contentType: "application/json",
     data: JSON.stringify({ revocation_reason: "Epiphany Point Spent" }),
     url: assertion_url,
+    // data: JSON.stringify({"name": name, "description": "An FCC prize category."}),
+    // data: JSON.stringify({"recipient": {"identity": useremail, "type": "email", "hashed": false, "plaintextIdentity": username}}),
     success: function(data, status, xhr) {
       PRINT(
         "SUCCESS: In deleteAssertion.. assertion deleted: {0}",
@@ -344,31 +332,25 @@ function createAssertion() {
     window.selectedPrize
   );
   var badgeId = getBadgeId(window.selectedPrize);
-  PRINT("In createAssertion.. the selected prize id: {0}", badgeId);
   var assertion_url = format(
     BADGR_BASE_URL + BADGR_ASSERTION_BADGECLASS_PATH,
     badgeId
   );
-  PRINT(
-    "In createAssertion.. the username is: {0}, the useremail is: {1} assertion url is: {2}",
-    username,
-    useremail,
-    assertion_url
-  );
+  PRINT("INFO: In createAssertion.. the assertion url is: {0}", assertion_url);
   $.ajax({
     method: "POST",
     dataType: "json",
     processData: false,
     contentType: "application/json",
     url: assertion_url,
+    // data: JSON.stringify({"name": name, "description": "An FCC prize category."}),
     data: JSON.stringify({
       recipient: {
         identity: useremail,
         type: "email",
         hashed: false,
         plaintextIdentity: username
-      },
-      description: "An Assertion for an FCC Prize"
+      }
     }),
     success: function(data, status, xhr) {
       PRINT(
@@ -385,79 +367,59 @@ function createAssertion() {
     },
     beforeSend: function(xhr) {
       xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN);
+      xhr.setRequestHeader("Content-Type", "application/json");
     }
   });
 }
 
 function createPrizeAssertions(ep_spent) {
   PRINT("INFO: In createPrizeAssertion");
-  ret = true;
   for (var i = 0; i < ep_spent; i++) {
-    tret = createAssertion();
-    if (tret === false) {
-      ret = false;
-    }
+    createAssertion();
   }
-  return ret;
 }
 
 function onSelectPrizeEvent(title) {
-  displaySpendEPText();
-  window.selectedPrize = convertToSlug(title);
+  selectedPrize = convertToSlug(title);
   $("#placeBidModal").modal();
 }
 
 function onPlaceBidEvent() {
   ep_spent = document.getElementById("num-spent-input").value;
   ep_saved = window.num_epiph_asserts;
-  ep_left = ep_saved - ep_spent;
   if (ep_spent == 0) {
     return true;
   }
   PRINT("INFO: In onPlaceBidEvent");
 
+  ep_left = ep_saved - ep_spent;
   PRINT(
     "INFO: ep_left: {0} ep_saved: {1} ep_spent: {2}",
     ep_left,
     ep_saved,
     ep_spent
   );
-  // createPrizeAssertions(ep_spent);
-  // deleteAssertions(ep_spent);
-  // $("#welcome-video").remove();
+  createPrizeAssertions(ep_spent);
+  deleteAssertions(ep_spent);
+  $("#welcome-video").remove();
   $("#welcome-title").text("Good job cryptonaut and good luck!");
   $("#introductory-text").text(
     "You now are entered to win, an email will be sent you confirming your bid."
   );
-
-  var msg = "";
-  if (ep_left != 0) {
-    msg =
-      "Now you can continue to bid on another prize with your remaining " +
-      ep_left +
-      " Epiphany Points, or go on back to the control center to earn some more!";
-  } else {
-    msg = "Now.. go back to Mission Control and earn more Epiphany Points!";
-    $("#congrats-instructions").text(msg);
-    $("#congrats-instructions").after(
-      '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-border-success btn-sm">Mission Control</a>'
-    );
-    ep_saved = window.num_epiph_asserts;
-  }
+  var msg =
+    "Now you can continue to bid on another prize with your remaining " +
+    ep_left +
+    " Epiphany Points, or go on back to the control center to earn some more!";
+  $("#congrats-instructions").text(msg);
+  $("#congrats-instructions").after(
+    '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-primary">Mission Control</a>'
+  );
+  ep_saved = window.num_epiph_asserts;
 
   ep_left = ep_saved - ep_spent;
-  // var good = createPrizeAssertions(ep_spent);
-  // if (good) {
-  //   deleteAssertions();
-  // } else {
-  //   PRINT(
-  //     "ERROR: NOT ALL PRIZE ASSERTIONS WERE CREATED!! NOT DELETING ANY OF THEM!"
-  //   );
-  // }
-  prizeAccounting();
-  window.old_num_epiph_asserts = window.num_epiph_asserts;
-  getAssertions();
-  testAssertionsCreated();
+  createPrizeAssertions(ep_spent);
+  deleteAssertions(ep_spent);
+
   return true;
 }
 
@@ -479,7 +441,7 @@ function getPrizeList() {
 
 function getBadgeClassNamesList() {
   PRINT(
-    "INFO: In getBadgeClassNameList.. the window.badgeclasses length is: {0}",
+    "INFO: In getBadgeClassNameList.. {0}",
     window.badgeclasses.result.length
   );
   for (var i = 0; i < window.badgeclasses.result.length; i++) {
@@ -498,15 +460,13 @@ function getBadgesToBeCreated() {
   }
   getBadgeClassNamesList();
 
-  prizeListSet = new Set(window.prizeList);
-  badgeClassNameListSet = new Set(window.badgeclassNamesList);
-  outSet = new Set(
-    [...prizeListSet].filter(x => !badgeClassNameListSet.has(x))
-  );
+  plSet = new Set(window.prizeList);
+  bcSet = new Set(window.badgeclassNamesList);
+  outSet = new Set([...plSet].filter(x => !bcSet.has(x)));
   PRINT(
-    "INFO: In getBadgesToBeCreated.. prizeListSet size: {0} .. badgeClassNameListSet size: {1} .. out size: {2}",
-    prizeListSet.size,
-    badgeClassNameListSet.size,
+    "INFO: In getBadgesToBeCreated.. plSet size: {0} .. bcSet size: {1} .. out size: {2}",
+    plSet.size,
+    bcSet.size,
     outSet.size
   );
   return Array.from(outSet);
@@ -514,7 +474,7 @@ function getBadgesToBeCreated() {
 
 async function testBadgesCreated() {
   PRINT("INFO: In testBadgesCreated");
-  started = false;
+  started = false 
   if (started === true) {
     window.timer_now_time += 3000;
   }
@@ -541,7 +501,7 @@ async function testBadgesCreated() {
 
 async function testAssertionsCreated() {
   PRINT("INFO: In testAssertionsCreated");
-  started = false;
+  started = false
   if (started === true) {
     window.timer_now_time += 3000;
   }
@@ -553,38 +513,14 @@ async function testAssertionsCreated() {
     PRINT(
       "SUCCESS: In testAssertionsCreated.. assertions list created.. \\0/ {0}",
       window.assertions.result.length
-    );
-  }
-}
-
-async function testDeletionsCompleted() {
-  PRINT("INFO: In testDeletionsCompleted");
-  started = false;
-  if (started === true) {
-    window.timer_now_time += 3000;
-  }
-  started = true;
-  PRINT("INFO: In testDeletionsCompleted");
-  if (window.old_num_epiph_asserts - ep_spent != window.num_epiph_asserts) {
-    await sleep(500);
-    if (window.timer_now_time > 6000) {
-      PRINT(
-        "In testDeletionsCompleted.. WTF 6000 ms have passed, calling getBadgeClasses"
-      );
-      getAssertions();
-      started = false;
-      now_time = 0;
-    }
-    testDeletionsCompleted();
-  } else {
-    PRINT(
-      "SUCCESS: In testDeletionsCompleted.. deletions completed.. \\o/ {0}",
-      ep_spent
-    );
+    )
   }
 }
 
 function getBadgeId(name) {
+  if (window.badgeclasses == null) {
+    testBadgesCreated();
+  }
   var num = badgeclasses.result.length;
   PRINT(
     "DASHBOARD: In getBadgeId.. the num badgeclasses is: {0} .. the name is: {1}",
@@ -593,177 +529,25 @@ function getBadgeId(name) {
   );
   for (var i = 0; i < num; i++) {
     var bc = window.badgeclasses.result[i];
-    PRINT(
-      "DASHBOARD: In getBadgeId.. the bc.name is: {0} .. the name is: {1}",
-      bc.name,
-      name
-    );
+    PRINT("DASHBOARD: In getBadgeId.. the bc.name is: {0} .. the name is: {1}", bc.name, name)
     if (bc.name === name) {
       return bc.entityId;
     }
   }
 }
 
-function prizeAccounting() {
-  var success = true;
-  var prizeAssertion = {
-    name: "",
-    email: "",
-    prize: "",
-    numEPSpent: 0,
-    timestamp: 0
-  };
-  var prizeAssertions = [prizeAssertion];
-  var bp = null;
-  PRINT(
-    "INFO: In prizeAccounting.. window.selectedPrize is: {0}",
-    window.selectedPrize
-  );
-  var badgeId = getBadgeId(window.selectedPrize);
-  PRINT(
-    "INFO prizeAccounting: badgeclasses.result type: {0} .. data: {1}",
-    typeof window.badgeclasses.result,
-    JSON.stringify(window.badgeclasses.result)
-  );
-  for (var i = 0; i < window.badgeclasses.result.length; ++i) {
-    var b = window.badgeclasses.result[i];
-    PRINT(
-      "INFO In prizeAccounting.. b.entityId: {0}, getBadgeId(selectedPrize): {1}",
-      b.entityId,
-      badgeId
-    );
-    if (b.entityId === badgeId) {
-      bp = b;
-    }
-  }
-  if (bp) {
-    PRINT("SUCCESS In prizeAssertions: WE HAVE BP !!");
-    prizeAssertion.name = username;
-    prizeAssertion.email = useremail;
-    prizeAssertion.prize = selectedPrize;
-    prizeAssertion.numEPSpent = ep_spent;
-    prizeAssertion.timestamp = Date.now();
-    PRINT(
-      "INFO In prizeAssertions: NEW prizeAssertion: {0}",
-
-      JSON.stringify(prizeAssertion)
-    );
-    if (bp.description && bp.description.startsWith("[{")) {
-      // sets prizeAssertions if there are existing on the server
-      PRINT(
-        "INFO In prizeAccounting.. the description string is: {0}",
-        bp.description
-      );
-      var ret = JSON.parse(bp.description);
-      PRINT(
-        "INFO In prizeAssertions: typeof(JSON.parse(bp.description): {0}",
-        typeof ret
-      );
-      if (Array.isArray(ret)) {
-        prizeAssertions = ret;
-        PRINT(
-          "INFO In prizeAssertions: OLD prizeAssertion(S): {0}",
-          JSON.stringify(prizeAssertions)
-        );
-      } else {
-        PRINT(
-          "ERROR In prizeAssertions: prizeAssertions is not an Array it is type: {0}",
-          typeof ret
-        );
-      }
-      if (!Array.isArray(prizeAssertions)) {
-        PRINT("WHAT THE FUCKING FUCK!");
-        return false;
-      }
-      // prizeAssertions.push(prizeAssertion);
-      // PRINT(
-      //   "INFO In prizeAssertions: NEW prizeAssertion(S): {0}",
-      //   JSON.stringify(prizeAssertions)
-      // );
-
-      // bp.description = JSON.stringify(prizeAssertions);
-      // PRINT(
-      //   "INFO In prizeAssertions: NEW prizeAssertion(S): {0}",
-      //   JSON.stringify(prizeAssertions)
-      // );
-    } else {
-      PRINT(
-        "INFO In prizeAssertions: OLD prizeAssertion(S) IS EMPTY, NOTHING ON SERVER"
-      );
-    }
-    prizeAssertions.push(prizeAssertion);
-    PRINT(
-      "INFO In prizeAssertions: NEW prizeAssertion(S): {0}",
-      JSON.stringify(prizeAssertions)
-    );
-
-    bp.description = JSON.stringify(prizeAssertions);
-    PRINT(
-      "INFO In prizeAssertions: NEW prizeAssertion(S): {0}",
-      JSON.stringify(prizeAssertions)
-    );
-    PRINT("INFO In prizeAccounting: Calling badgeclass update now");
-    $.ajax({
-      method: "PUT",
-      dataType: "json",
-      processData: false,
-      contentType: "application/json",
-      url: BADGR_BASE_URL + format(BADGR_BADGECLASS_UPDATE_PATH, bp.entityId),
-      data: JSON.stringify(bp),
-      success: function(data, status, xhr) {
-        PRINT("SUCCESS: In prizeAccounting: {0}", JSON.stringify(data));
-      },
-      error: function(xhr, status, errMsg) {
-        success = false;
-        PRINT(
-          "ERROR: In prizeAccounting.. badgeclass update FAILED! {0} {1}",
-          status,
-          errMsg
-        );
-      },
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader("Authorization", "Bearer " + BADGR_ACCESS_TOKEN);
-        xhr.setRequestHeader("Content-Type", "application/json");
-      }
-    });
-    createPrizeAssertions(ep_spent);
-    deleteAssertions(ep_spent);
-    testDeletionsCompleted();
-  } else {
-    success = false;
-    PRINT(
-      "ERROR: In prizeAccounting.. the prize badgeclass {0}, was NOT FOUND in the badge_class list! {1}",
-      window.selectedPrize,
-      JSON.stringify(window.badgeclasses)
-    );
-  }
-  return success;
-}
-
-function sleep(millis) {
-  var date = new Date();
-  var curDate = null;
-  do {
-    curDate = new Date();
-  } while (curDate - date < millis);
-}
-
 getUrlVars();
 getBadgeClasses();
 testBadgesCreated();
-getPrizeList();
-PRINT("INFO: In global_scope.. prizeList: {0}", prizeList.toString());
 var new_badges_needed = getBadgesToBeCreated();
 var num_badges_needed = new_badges_needed.length;
 PRINT("DASHBOARD: In global_scope.. num_badges_needed: {0}", num_badges_needed);
 if (num_badges_needed > 0) {
   createBadges(new_badges_needed);
 }
-
-window.old_num_epiph_asserts = window.num_epiph_asserts;
 getAssertions();
 testAssertionsCreated();
 displaySpendEPText();
+getPrizeList();
+PRINT("INFO: In global_scope.. prizeList: {0}", prizeList.toString());
 
-// 5BqKu<HV
-// 05vxm7yHLQ?)
