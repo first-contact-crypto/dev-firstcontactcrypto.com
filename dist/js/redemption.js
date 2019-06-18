@@ -209,25 +209,6 @@ function getAssertions() {
 
   assertions.result = assertions_to_keep
 
-
-
-
-  // for (i = 0; i < window.assertions.result.length; ++i) {
-  //   output = []
-  //   a = window.assertions.result[i];
-  //   PRINT(
-  //     "INFO: In getAssertions.. assertion.recipient.identity: {0} window.useremail: {1}",
-  //     a.recipient.identity,
-  //     window.useremail
-  //   );
-  //   if (a.recipient.identity != window.useremail) {
-  //     // window.assertions.result.splice(i, 1);
-  //     output.append
-  //     --window.num_epiph_asserts
-  //   }
-  // }
-
-
   PRINT(
     "INFO: In getAssertions.. the num assertions after: {0}",
     assertions.result.length
@@ -461,9 +442,9 @@ function onPlaceBidEvent() {
   createPrizeAssertions(ep_spent);
   deleteAssertions(ep_spent);
   getAssertions()
-  testAssertionsCreated()
+  // testAssertionsCreated()
   // ep_spent = document.getElementById("num-spent-input").value;
-  // $("num-spent-input").val(assertions.result.length)
+  $("num-spent-input").val(assertions.result.length)
   return true;
 }
 
