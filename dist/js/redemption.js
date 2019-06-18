@@ -401,7 +401,9 @@ function createPrizeAssertions(ep_spent) {
 }
 
 function onSelectPrizeEvent(title) {
-  $("num-spent-input").val(assertions.result.length);
+  // $("num-spent-input").val(assertions.result.length);
+  // ep_spent = document.getElementById("num-spent-input").value;
+  document.getElementById("num-spent-input").setAttribute("max", window.num_epiph_asserts);
   window.selectedPrize = convertToSlug(title);
   $("#placeBidModal").modal();
 }
