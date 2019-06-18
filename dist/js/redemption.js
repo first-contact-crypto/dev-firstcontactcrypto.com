@@ -458,6 +458,8 @@ function onPlaceBidEvent() {
   deleteAssertions(ep_spent);
   getAssertions()
   testAssertionsCreated()
+  ep_spent = document.getElementById("num-spent-input").value;
+  $("num-spent-input").val(assertions.result.length)
   return true;
 }
 
