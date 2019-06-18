@@ -404,8 +404,8 @@ function onSelectPrizeEvent(title) {
   // $("num-spent-input").val(assertions.result.length);
   // ep_spent = document.getElementById("num-spent-input").value;
   num_to_spend = 0
-  if (ep_spent > 0) {
-    num_to_spend = ep_spent
+  if (ep_left > 0) {
+    num_to_spend = ep_left
   }
   else {
     num_to_spend = num_epiph_asserts
