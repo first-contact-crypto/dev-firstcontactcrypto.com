@@ -451,17 +451,17 @@ function onPlaceBidEvent() {
     " Epiphany Points, or go on back to the control center to earn some more!";
   $("#congrats-instructions").text(msg);
   $("#congrats-instructions").after(
-    '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-primary">Mission Control</a>'
+    '<br/><a href="https://learn.firstcontactcrypto.com/dashboard" type="button" class="btn btn-outline-success">Mission Control</a>'
   );
-  ep_saved = window.num_epiph_asserts;
+  // ep_saved = window.num_epiph_asserts;
 
-  ep_left = ep_saved - ep_spent;
-  createPrizeAssertions(ep_spent);
-  deleteAssertions(ep_spent);
-  getAssertions()
-  // testAssertionsCreated()
+  // ep_left = ep_saved - ep_spent;
+  // createPrizeAssertions(ep_spent);
+  // deleteAssertions(ep_spent);
+  // getAssertions()
+  // // testAssertionsCreated()
   // ep_spent = document.getElementById("num-spent-input").value;
-  $("num-spent-input").val(assertions.result.length)
+  $("num-spent-input").val(ep_left)
   return true;
 }
 
