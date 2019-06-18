@@ -300,7 +300,10 @@ function displaySpendEPText() {
 
 var wtf_count = 0
 
-function deleteAssertion() {
+function deleteAssertion(num) {
+  if (wtf_count >= num) {
+    return
+  }
   wtf_count++
 
   PRINT("INFO In deleteAssertion.. the wtf_count is: {0}", wtf_count);
@@ -354,7 +357,7 @@ function deleteAssertion() {
 function deleteAssertions(num) {
   PRINT("INFO: In deleteAssertions.. deleting {0}", num);
   for (i = 0; i < num; i++) {
-    deleteAssertion();
+    deleteAssertion(num);
     num_epiph_asserts -= 1;
     // sleep(500)
   }
@@ -417,6 +420,7 @@ function createPrizeAssertions(ep_spent) {
 }
 
 function onSelectPrizeEvent(title) {
+  $("num-spent-input").val(assertions.result.length);
   window.selectedPrize = convertToSlug(title);
   $("#placeBidModal").modal();
 }
@@ -458,8 +462,8 @@ function onPlaceBidEvent() {
   deleteAssertions(ep_spent);
   getAssertions()
   testAssertionsCreated()
-  ep_spent = document.getElementById("num-spent-input").value;
-  $("num-spent-input").val(assertions.result.length)
+  // ep_spent = document.getElementById("num-spent-input").value;
+  // $("num-spent-input").val(assertions.result.length)
   return true;
 }
 
