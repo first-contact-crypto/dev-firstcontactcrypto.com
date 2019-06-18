@@ -407,7 +407,7 @@ function onSelectPrizeEvent(title) {
   document.getElementById("num-spent-input").value = 0
     document.getElementById("spend-ep-text").innerHTML =
       "You currently have " +
-      window.num_epiph_asserts +
+      --window.num_epiph_asserts +
       " epiphany points to spend. Each EP represents one chance to win. The more you spend the more chances you have to win!";
     document
       .getElementById("num-spent-input")
