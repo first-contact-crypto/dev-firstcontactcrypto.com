@@ -456,7 +456,8 @@ function onPlaceBidEvent() {
   ep_left = ep_saved - ep_spent;
   createPrizeAssertions(ep_spent);
   deleteAssertions(ep_spent);
-
+  getAssertions()
+  testAssertionsCreated()
   return true;
 }
 
