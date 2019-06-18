@@ -403,15 +403,22 @@ function createPrizeAssertions(ep_spent) {
 function onSelectPrizeEvent(title) {
   // $("num-spent-input").val(assertions.result.length);
   // ep_spent = document.getElementById("num-spent-input").value;
-  document.getElementById("num-spent-input").setAttribute("max", window.num_epiph_asserts);
+  num_to_spend = 0
+  if (ep_spent > 0) {
+    num_to_spend = ep_spent
+  }
+  else {
+    num_to_spend = num_epiph_asserts
+  }
+  document.getElementById("num-spent-input").setAttribute("max", num_to_spend);
   document.getElementById("num-spent-input").value = 0
     document.getElementById("spend-ep-text").innerHTML =
       "You currently have " +
-      --window.num_epiph_asserts +
+      num_to_spend +
       " epiphany points to spend. Each EP represents one chance to win. The more you spend the more chances you have to win!";
     document
       .getElementById("num-spent-input")
-      .setAttribute("max", window.num_epiph_asserts);
+      .setAttribute("max", num_to_spend);
   window.selectedPrize = convertToSlug(title);
   $("#placeBidModal").modal();
 }
