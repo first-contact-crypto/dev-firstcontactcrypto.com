@@ -10,7 +10,7 @@
   text-transform: uppercase;
   white-space: normal;
   word-wrap: break-word;
-  color: $btn-color-basic;
+  color: inherit;
   &:hover,
   &:active,
   &:focus {
@@ -159,4 +159,9 @@
 .btn-warning:not(:disabled):not(.disabled):active, 
 .show>.btn-warning.dropdown-toggle {
   color: $white-base;
+}
+
+// Gradient buttons
+@each $name, $val in $gradients {
+  @include make-gradient-button($name, $val);
 }

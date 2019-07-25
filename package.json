@@ -1,44 +1,32 @@
 {
   "name": "fcc",
-  "version": "3.9.1",
-  "description": "Material Design for Bootstrap (MDB) is a powerful Material Design UI KIT for most popular HTML, CSS, and JS framework - Bootstrap.",
-  "main": "js/mdb.min.js",
+  "version": "4.8.7",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "js-compile-plugins": "babel --presets env js/src/ --out-dir js/dist/"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mdbootstrap/bootstrap-material-design.git"
+    "url": "http://git.mdbootstrap.com/mdb/jquery/jq-gulp.git"
   },
-  "keywords": [
-    "material",
-    "design",
-    "bootstrap",
-    "mdbootstrap",
-    "mdb",
-    "framework",
-    "css",
-    "mobile-first",
-    "responsive"
-  ],
   "author": "MDBootstrap",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mdbootstrap/bootstrap-material-design/issues"
-  },
-  "homepage": "https://mdbootstrap.com",
-  "dependencies": {
-    "github-api": "^3.2.2"
-  },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.1.2",
+    "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.26.7",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^6.1.0",
+    "gulp-autoprefixer": "^4.1.0",
     "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.2.0",
-    "gulp-imagemin": "^6.0.0",
-    "gulp-minify": "^3.1.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2"
-  }
+    "gulp-imagemin": "^4.1.0",
+    "gulp-minify": "^2.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.3.3"
+  },
+  "description": ""
 }
