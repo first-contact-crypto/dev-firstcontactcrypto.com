@@ -1,1 +1,70 @@
 // Your custom variables
+
+
+
+// Sample red theme to demonstrate SASS overrides
+
+// Theme colors
+//
+// Note: define colors needed by your theme first
+
+// Define the primary colors
+$red: #d9534f;
+$blue: #0000ff;
+$navy-blue: #0066ff;
+$link-blue: #2196f3;
+$black: #000;
+$my-black: #111;
+$white: #fff;
+$green: #00ff00;
+$green-success: #00c851;
+$link-blue: #6699cc;
+
+
+// background
+$bg1: $my-black;
+$bg1-ll: lighten($bg1, 5%);
+$bg1-l1: lighten($bg1, 10%);
+$bg1-l2: lighten($bg1, 20%);
+$bg1-l3: lighten($bg1, 30%);
+// headers
+$h1: $white;
+$h1-d1: darken($h1, 10%);
+$h1-d3: darken($h1, 20%);
+// text
+$t1: $white;
+$t1-dd: darken($t1, 5%);
+$t1-d1: darken($t1, 10%);
+$t1-d2: darken($t1, 20%);
+$t1-d3: darken($t1, 30%);
+// accents
+$a1: $blue;
+$a2: $green-success;
+// borders
+$bdr1: $a1;
+// buttons
+$btn1: $a2;
+// links
+$l1: $link-blue;
+$l2: $green-success;
+$l3: $link-blue;
+
+$course-search-input-height: 20px;
+
+
+
+$primary: $blue;
+$inverse: $black;
+
+// Make red the primary color
+// $primary: $blue;
+// $inverse: $black;
+
+// Theme fonts
+$font-family-sans-serif: cursive;
+
+// Links
+//
+// Style anchor elements.
+
+$link-color:                              $link-blue;

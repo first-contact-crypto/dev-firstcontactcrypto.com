@@ -1,1 +1,199 @@
 // Your custom styles
+
+// FONTS
+@font-face {
+    font-family: 'zianregular';
+    src: url('font/qbotype-font-zian/zian_free_promo_2015_con_kerning-webfont.eot') format('embedded-opentype'),
+         url('font/qbotype-font-zian/zian_free_promo_2015_con_kerning-webfont.woff2') format('woff2'),
+         url('font/qbotype-font-zian/zian_free_promo_2015_con_kerning-webfont.woff') format('woff'),
+         url('font/qbotype-font-zian/zian_free_promo_2015_con_kerning-webfont.ttf') format('truetype'),
+         url('font/qbotype-font-zian/zian_free_promo_2015_con_kerning-webfont.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+
+.btn-outline-success {
+  background: $bg1 !important;
+  opacity: none !important;
+}
+
+.btn-outline-success:hover{
+  background: $bg1-ll !important;
+  border: 1px solid $bdr1 !important;
+  color: $btn1 !important;
+}
+
+#welcome {
+  background-color: $bg1;
+  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
+	border-radius: 7px;
+}
+
+#features {
+  background-color: $bg1;
+  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
+	border-radius: 7px;
+}
+
+#services {
+  background-color: $bg1;
+  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
+	border-radius: 7px;
+}
+
+html {
+  scroll-behavior: smooth;
+
+}
+
+html,
+body
+{
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-image: url("../img/loopable-stars-4096x2304.png");
+  background-color: #000;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h2 {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+/* grey-darken-4 */
+.my-bg-color-primary {
+  background-color: #111111 !important;
+}
+
+.my-bg-color-secondary {
+  background-color: #777 !important;
+}
+
+/* indigo-accent-1 */
+.my-color-primary {
+  color: #fff !important;
+  font-weight: normal;
+}
+
+.my-color-secondary {
+  color:  #fff !important;
+}
+
+.navbar {
+  background-color: #111111 !important;
+}
+
+.my-hr-primary {
+  border-top: 1px solid #0000FF !important;
+  /* padding-bottom: 100px; */
+}
+
+.my-hr-secondary {
+  border-top: 1px solid #fff;
+}
+
+.hr-light {
+  border-top: 1px solid #fff;
+}
+
+.hr-dark {
+  border-top: 1px solid #666;
+}
+
+.deep-purple {
+  background-color: #673ab7 !important;
+}
+
+.card {
+  border: 1px solid #673ab7 !important;
+  background-color: #000 !important;
+}
+
+/** Cards **/
+
+  .card .card-body .card-text {
+    color: #ddd;
+    font-size: 0.9rem;
+    font-weight: 400; }
+
+.my-anchor::before {
+  height: 60px;
+  content: "";
+  display: block;
+}
+
+.modal-content {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #000;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-dialog.modal-notify .modal-body {
+  padding: 1.5rem;
+  color: #fff; }
+
+.card-img-top {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.my-jumbotron {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.my-card-deck {
+  background-color: #000;
+}
+
+.my-text-border-blue {
+  text-shadow: 2px 0 0 #0000FF, -2px 0 0 #0000FF, 0 2px 0 #0000FF, 0 -2px 0 #0000FF, 1px 1px #0000FF, -1px -1px 0 #0000FF, 1px -1px 0 #0000FF, -1px 1px 0 #0000FF;
+  color: blue !important;
+}
+
+#my-move-hr {
+  margin-top: 150px;
+}
+
+#my-landing {
+  height: 100%;
+  margin-bottom: 110px;
+}
+
+#my-container {
+  margin-top: 10vh;
+}
+
+#my-welcome-title {
+  margin-top: 120px;
+}
+
+#my-welcome-button {
+  margin-top: 60px;
+  margin-bottom: 15px;
+}
