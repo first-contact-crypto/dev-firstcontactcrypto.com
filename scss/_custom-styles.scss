@@ -28,21 +28,24 @@
 }
 
 #welcome {
-  background-color: $bg1;
-  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
-	border-radius: 7px;
+  background-color: $bg1 !important;
+	box-shadow: 0 0 100px 10px rgba(0,0,255,.175) !important; 
+  border-radius: 7px !important;
+  padding: 30px !important;
 }
 
 #features {
-  background-color: $bg1;
-  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
-	border-radius: 7px;
+  background-color: $bg1 !important;
+	box-shadow: 0 0 100px 10px rgba(0,0,255,.175) !important; 
+  border-radius: 7px !important; 
+  padding: 30px !important;
 }
 
 #services {
-  background-color: $bg1;
-  box-shadow: 0 30px 40px 40px rgba(0,0,255,.1) !important;
-	border-radius: 7px;
+  background-color: $bg1 !important;
+	box-shadow: 0 0 100px 10px rgba(0,0,255,.175) !important; 
+  border-radius: 7px !important;
+  padding: 30px !important;
 }
 
 html {
@@ -173,7 +176,6 @@ h2 {
 
 .my-text-border-blue {
   text-shadow: 2px 0 0 #0000FF, -2px 0 0 #0000FF, 0 2px 0 #0000FF, 0 -2px 0 #0000FF, 1px 1px #0000FF, -1px -1px 0 #0000FF, 1px -1px 0 #0000FF, -1px 1px 0 #0000FF;
-  color: blue !important;
 }
 
 #my-move-hr {
@@ -197,3 +199,5 @@ h2 {
   margin-top: 60px;
   margin-bottom: 15px;
 }
+
+
